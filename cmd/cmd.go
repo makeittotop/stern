@@ -38,6 +38,7 @@ import (
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/cli-runtime/pkg/genericclioptions"
 	"k8s.io/client-go/kubernetes"
+	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/klog/v2"
 
@@ -152,6 +153,8 @@ func (o *options) Complete(args []string) error {
 	}
 	if o.burst > 0 {
 		restConfig.Burst = o.burst
+	} else if o.qps > 0 {
+		restConfig.Burst = rest.DefaultBurst
 	}
 
 	o.client = kubernetes.NewForConfigOrDie(restConfig)
